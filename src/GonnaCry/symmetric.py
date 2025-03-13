@@ -28,9 +28,16 @@ class AESCipher(object):
         cipher = AES.new(self.key, AES.MODE_CBC, iv)
         return self._unpad(cipher.decrypt(enc[AES.block_size:]))
 
+    # def _pad(self, s):
+    #     s = s.decode('utf-8')
+    #     return s + (self.bs - len(s) % self.bs) * chr(self.bs - len(s) % self.bs)
     def _pad(self, s):
-        s = s.decode('utf-8')
-        return s + (self.bs - len(s) % self.bs) * chr(self.bs - len(s) % self.bs)
+        if isinstance(s, str):  
+            s = s.encode()  # 確保轉換為 bytes（防止 TypeError）
+
+        pad_size = self.bs - len(s) % self.bs  # 計算需要填充的長度
+        return s + bytes([pad_size] * pad_size)  # 填充並回傳 bytes
+
 
     @staticmethod
     def _unpad(s):

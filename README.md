@@ -1,3 +1,13 @@
+# update version
+1. recommand using python venv
+2. update requirement.txt: pycryptodome requests pyinstaller flask
+3. from crypto to pycryptodome
+4. replace the get random method in generate_keys.py (using get_random_bytes(size))
+5. change the target folder from variable.home to variable.test_path
+6. /home/benson/gonnacry need to create manually
+7. remove changing the xfconf background image 
+8. remove drop daemon feature
+
 # GonnaCry Ransomware
 
 Original Repository of the GonnaCry Ransomware.

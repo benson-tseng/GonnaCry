@@ -57,7 +57,7 @@ def decrypt():
     except base64.binascii.Error:
         return Response('Wrong format key. Expected: b64encoded private key!', status=415, headers=headers)
 
-    return Response(data, status=200, headers=headers)
+    # return Response(data, status=200, headers=headers)
     
     try:
         enc = json.loads(data)

