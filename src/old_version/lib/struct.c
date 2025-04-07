@@ -32,8 +32,8 @@ void append(List **l, char *file_path, char *key, char *iv){
 
     /*Linked List*/
     if(*l == NULL){
-        (*l)->size = 0;
         (*l) = aux;
+        (*l)->size = 0;
         (*l)->prox = NULL;
     }else{
         aux->prox = *l;

@@ -146,40 +146,47 @@ void shred(char *path){
  * @param key -> type = char * (String)
  * @param iv -> type = char * (String)
  */
-void encrypt(FILE *in, FILE *out, char *key, char *iv){
-    int chunk_size = 512;
+ void encrypt(FILE *in, FILE *out, char *key, char *iv){
+    const int chunk_size = 512;
     unsigned char inbuf[chunk_size];
     unsigned char outbuf[chunk_size + EVP_MAX_BLOCK_LENGTH];
-    int inlen;
-    int outlen;
+    int inlen, outlen;
 
     EVP_CIPHER_CTX *ctx = EVP_CIPHER_CTX_new();
+    if (!ctx) {
+        fprintf(stderr, "Failed to create EVP_CIPHER_CTX\n");
+        return;
+    }
 
-    EVP_CIPHER_CTX_init(ctx);
-    EVP_CipherInit_ex(ctx, EVP_bf_cbc(), NULL, NULL, NULL, 1); // 1 encrypt - 0 decrypt
-    EVP_CIPHER_CTX_set_key_length(ctx, 16);
-    EVP_CipherInit_ex(ctx, NULL, NULL, key, iv, 1);
-    while(1){
-        inlen = fread(inbuf, 1, chunk_size, in);
-        if(inlen <= 0)   break;
-        if(!EVP_CipherUpdate(ctx, outbuf, &outlen, inbuf, inlen)){
-            /* Error */
-            EVP_CIPHER_CTX_cleanup(ctx);
+    // 初始化 Cipher：使用 AES CBC，加密模式 (1)
+    if (!EVP_CipherInit_ex(ctx, EVP_aes_256_cbc(), NULL, (unsigned char*)key, (unsigned char*)iv, 1)) {
+        fprintf(stderr, "EVP_CipherInit_ex failed\n");
+        EVP_CIPHER_CTX_free(ctx);
+        return;
+    }
+
+    // 主加密迴圈
+    while ((inlen = fread(inbuf, 1, chunk_size, in)) > 0) {
+        if (!EVP_CipherUpdate(ctx, outbuf, &outlen, inbuf, inlen)) {
+            fprintf(stderr, "EVP_CipherUpdate failed\n");
+            EVP_CIPHER_CTX_free(ctx);
             return;
         }
         fwrite(outbuf, 1, outlen, out);
     }
-    if(!EVP_CipherFinal_ex(ctx, outbuf, &outlen))
-    {
-        /* Error */
-        EVP_CIPHER_CTX_cleanup(ctx);
+
+    if (!EVP_CipherFinal_ex(ctx, outbuf, &outlen)) {
+        fprintf(stderr, "EVP_CipherFinal_ex failed\n");
+        EVP_CIPHER_CTX_free(ctx);
         return;
     }
+
     fwrite(outbuf, 1, outlen, out);
-    EVP_CIPHER_CTX_cleanup(ctx);
+    EVP_CIPHER_CTX_free(ctx);
     rewind(in);
     rewind(out);
 }
+
 
 /**
  * This function will decrypt the content from encrypted file and save on the

