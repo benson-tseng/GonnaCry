@@ -4,11 +4,13 @@
 FILE_SIZE="1M"
 
 # 目標資料夾
-TARGET_DIR="target"
+TARGET_DIR="../../../target"
 
 # 新的副檔名清單
 # EXTENSIONS=("csr" "p12" "suo" "ppsm" "pfx" "odg" "sldx" "otg" "onetoc2" "brd")
 EXTENSIONS=("csr" "sldx" "otg" "onetoc2" "brd")
+
+rm -rf ~/target
 
 # 建立資料夾
 mkdir -p "$TARGET_DIR"

